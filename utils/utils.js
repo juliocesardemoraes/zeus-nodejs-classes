@@ -1,4 +1,6 @@
-const { faker } = require("@faker-js/faker");
+import { faker } from "@faker-js/faker";
+
+// const { faker } = require("@faker-js/faker");
 
 function createRandomUser() {
   return {
@@ -12,4 +14,11 @@ function createRandomUser() {
   };
 }
 
-module.exports = createRandomUser();
+function createRandomUserTwo() {
+  return {
+    userId: faker.string.uuid(),
+    username: faker.internet.username(),
+  };
+}
+
+export { createRandomUser, createRandomUserTwo };

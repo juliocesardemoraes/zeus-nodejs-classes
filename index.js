@@ -1,3 +1,3 @@
-const createRandomUser = require("./utils/utils");
+import { createRandomUser } from "./utils/utils.js";
 
 console.log(createRandomUser());
