@@ -1,4 +1,5 @@
 import express from "express";
+import { nameRouter } from "./routes.js";
 
 const app = express();
 
@@ -6,9 +7,7 @@ app.get("/", (request, response) => {
   response.status(200).send("Olá mundo");
 });
 
-app.get("/name", (request, response) => {
-  response.status(200).send("Júlio Moraes");
-});
+app.use("/name", nameRouter);
 
 const PORT = 3000;
 
