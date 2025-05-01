@@ -6,7 +6,7 @@ function App() {
   const [userName, setUserName] = useState("");
   useEffect(() => {
     (async () => {
-      const response = await axios.get("http://localhost:4001/name");
+      const response = await axios.get("http://localhost:3000/name");
       console.log(response.data);
       setUserName(response.data);
     })();
