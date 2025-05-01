@@ -12,9 +12,7 @@ app.get("/", (request, response) => {
 
 app.use("/name", nameRouter);
 
-const PORT = 3000;
-
-// localhost:3000
+const PORT = 3001;
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
