@@ -1,0 +1,11 @@
+### Get hello world
+GET http://localhost:3001
+Content-Type: application/json
+
+### Test password
+POST http://localhost:3001/validate-password
+Content-Type: application/json
+
+{
+    "password": "12344666"
+}
