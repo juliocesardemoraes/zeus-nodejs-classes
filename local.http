@@ -2,26 +2,27 @@
 GET http://localhost:3001
 Content-Type: application/json
 
-### Test password
-POST http://localhost:3001/validate-password
+
+### Get users
+GET http://localhost:3001/users
+Content-Type: application/json
+
+
+### Patch users
+PATCH http://localhost:3001/users/1
 Content-Type: application/json
 
 {
-    "password": "12344666"
+    "name": "jcmcf"
 }
 
-### User Update
-PUT http://localhost:3001/update-user
+
+### Patch users
+PUT http://localhost:3001/users/1
 Content-Type: application/json
 
 {
-    "password": "12344666"
-}
-
-### User Update PATCH
-PATCH http://localhost:3001/update-user
-Content-Type: application/json
-
-{
-    "password": "12344666"
+    "name": "jc",
+    "age": 29,
+    "password": 123
 }
