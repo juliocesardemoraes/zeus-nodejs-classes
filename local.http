@@ -9,3 +9,19 @@ Content-Type: application/json
 {
     "password": "12344666"
 }
+
+### User Update
+PUT http://localhost:3001/update-user
+Content-Type: application/json
+
+{
+    "password": "12344666"
+}
+
+### User Update PATCH
+PATCH http://localhost:3001/update-user
+Content-Type: application/json
+
+{
+    "password": "12344666"
+}

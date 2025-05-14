@@ -12,16 +12,14 @@ app.get("/", (request, response) => {
   response.status(200).send("Olá mundo");
 });
 
-app.use("/name", nameRouter);
-
-app.post("/validate-password", (request, response) => {
+app.put("/update-user", (request, response) => {
   const body = request.body;
+  return response.status(200).send({ message: "user updated" });
+});
 
-  if (body.password.length >= 6) {
-    return response.status(200).send({ message: "Senha válida" });
-  } else {
-    return response.status(400).send({ message: "Senha inválida" });
-  }
+app.patch("/update-user", (request, response) => {
+  const body = request.body;
+  return response.status(200).send({ message: "user partially updated" });
 });
 
 const PORT = 3001;
