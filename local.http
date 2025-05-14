@@ -9,3 +9,13 @@ Content-Type: application/json
 {
     "password": "12344666"
 }
+
+
+### Users
+GET http://localhost:3001/users
+
+
+
+### Delete Users
+DELETE http://localhost:3001/users/2
+
