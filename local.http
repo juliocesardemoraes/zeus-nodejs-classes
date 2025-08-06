@@ -1,21 +1,11 @@
-### Get hello world
-GET http://localhost:3001
+### GET User
+GET http://localhost:3000/users
 Content-Type: application/json
 
-### Test password
-POST http://localhost:3001/validate-password
+{}
+
+### Create User
+POST http://localhost:3000/users
 Content-Type: application/json
 
-{
-    "password": "12344666"
-}
-
-
-### Users
-GET http://localhost:3001/users
-
-
-
-### Delete Users
-DELETE http://localhost:3001/users/2
-
+{}

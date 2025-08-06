@@ -1,56 +1,37 @@
 import express from "express";
-import { nameRouter } from "./routes.js";
 import cors from "cors";
+import User from "./database/models/user.js";
+import connectToDatabase from "./database/config.js";
 
 const app = express();
-
-app.use(cors());
-
+app.use(
+  cors({
+    exposedHeaders: ["X-Total-Count"],
+  })
+);
 app.use(express.json());
 
-app.get("/", (request, response) => {
-  response.status(200).send("Olá mundo");
+connectToDatabase();
+
+app.get("/", (req, res) => {
+  res.status(200).send({ working: true });
 });
 
-const PORT = 3001;
-
-const users = [
-  { id: 1, name: "Ana", age: 25, password: "admin12345" },
-  { id: 2, name: "Carlos", age: 30, password: "adm1234" },
-];
-
-app.get("/users", (request, response) => {
-  return response.status(200).send(users);
+app.get("/users", async (request, response) => {
+  const users = await User.find({});
+  return response.status(200).send({ working: true, users });
 });
 
-app.delete("/users/:id", (request, response) => {
-  const { id } = request.params;
-  console.log(id);
-
-  let indexToDelete = null;
-
-  for (let i = 0; i < users.length; i++) {
-    if (id == users[i].id) {
-      indexToDelete = i;
-    }
-  }
-
-  users.splice(indexToDelete, 1);
-
-  //
-  return response
-    .status(200)
-    .send({
-      message: "user deleted!",
-      messagept: "usuario deletado com sucesso!",
-      users,
-    });
-
-  // 200
+app.post("/users", async (request, response) => {
+  const users = await User.create({
+    name: "Júlio Teste",
+    password: "123",
+  });
+  return response.status(201).send({ working: true, users });
 });
+
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
-
-export default app;
