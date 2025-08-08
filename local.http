@@ -4,8 +4,6 @@ Content-Type: application/json
 
 {}
 
-# 6895f2bc886abd18a759038c
-
 ### Create User
 POST http://localhost:3000/users
 Content-Type: application/json
@@ -14,20 +12,4 @@ Content-Type: application/json
     "name": "Júlio Teste",
     "password": "123",
     "email": "teste@gmail.com"
-}
-
-### GET TODO
-GET http://localhost:3000/todos
-Content-Type: application/json
-
-{}
-
-
-### Create TODO
-POST http://localhost:3000/todos
-Content-Type: application/json
-
-{
-    "title": "Lavar Louça",
-    "userId": "6895f2bc886abd18a759038c"
 }
