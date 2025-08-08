@@ -8,4 +8,9 @@ userRouter.get("/", async (request, response) => {
   return response.status(200).send({ working: true, users });
 });
 
+userRouter.post("/", async (request, response) => {
+  const users = await User.create(request.body);
+  return response.status(200).send({ working: true, users });
+});
+
 export { userRouter };
