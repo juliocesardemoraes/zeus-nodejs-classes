@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import connectToDatabase from "./database/config.js";
 import { userRouter } from "./modules/user/routes.js";
+import { todoRouter } from "./modules/todo/routes.js";
 
 const app = express();
 app.use(
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRouter);
+app.use("/todos", todoRouter);
 
 // app.get("/users", async (request, response) => {
 //   const users = await User.find({});
