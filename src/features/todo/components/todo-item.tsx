@@ -11,21 +11,13 @@ import { Checkbox } from "@radix-ui/react-checkbox";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@radix-ui/react-tabs";
 import { Plus, Trash2, RotateCcw } from "lucide-react";
 import React, { useState } from "react";
-import { useQueryClient, useQuery } from "@tanstack/react-query";
-import { getTodos } from "../services/action";
-
-interface ITodo {
-  _id: string;
-  title: string;
-  description: string;
-  completed: boolean;
-  softDelete: boolean;
-  userId: number;
-  createdAt: Date;
-}
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import { getTodos, postTodo } from "../services/action";
+import { ITodo } from "../config/types";
+import { SkeletonCard } from "./todo-skeleton";
 
 export default function TodoItem() {
-  const [inputValue, setInputValue] = useState("");
+  const [title, setTitle] = useState("");
 
   const queryClient = useQueryClient();
   const {
@@ -37,17 +29,20 @@ export default function TodoItem() {
     queryFn: getTodos,
   });
 
+  // Mutations
+  const mutation = useMutation({
+    mutationFn: postTodo,
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
+
   const adicionarTarefa = () => {
-    // if (inputValue.trim() !== "") {
-    //   const novaTarefa: Todo = {
-    //     id: Date.now(),
-    //     text: inputValue.trim(),
-    //     completed: false,
-    //     deleted: false,
-    //   };
-    //   setTodos([...todos, novaTarefa]);
-    //   setInputValue("");
-    // }
+    if (title.trim() !== "") {
+      mutation.mutate({ title });
+      setTitle("");
+    }
   };
 
   const alternarTarefa = (id: string) => {
@@ -84,14 +79,29 @@ export default function TodoItem() {
     // }
   };
 
-  if (isLoading) return <></>;
+  if (error) {
+    return (
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold">
+            Lista de tarefas - Erro
+          </CardTitle>
+          <CardContent>
+            Provavelmente ocorreu algum erro na api para buscar as tarefas
+          </CardContent>
+        </CardHeader>
+      </Card>
+    );
+  }
 
-  const tarefasAtivas = todos.filter((t: ITodo) => !t.softDelete);
-  const tarefasDeletadas = todos.filter((t: ITodo) => t.softDelete);
-  const tarefasConcluidas = tarefasAtivas.filter(
+  if (isLoading) return <SkeletonCard></SkeletonCard>;
+
+  const tarefasAtivas = todos?.filter((t: ITodo) => !t.softDelete);
+  const tarefasDeletadas = todos?.filter((t: ITodo) => t.softDelete);
+  const tarefasConcluidas = tarefasAtivas?.filter(
     (t: ITodo) => t.completed
   ).length;
-  const totalAtivas = tarefasAtivas.length;
+  const totalAtivas = tarefasAtivas?.length;
 
   return (
     <Card>
@@ -109,7 +119,6 @@ export default function TodoItem() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Aba: Tarefas Ativas */}
           <TabsContent value="active" className="space-y-4 mt-4">
             <CardDescription className="text-center">
               {totalAtivas === 0
@@ -117,12 +126,11 @@ export default function TodoItem() {
                 : `${tarefasConcluidas} de ${totalAtivas} tarefas concluídas`}
             </CardDescription>
 
-            {/* Campo para adicionar nova tarefa */}
             <div className="flex gap-2">
               <Input
-                placeholder="Adicione uma nova tarefa..."
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                placeholder=" uma nova tarefa..."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 onKeyPress={pressEnter}
                 className="flex-1"
               />
@@ -131,7 +139,6 @@ export default function TodoItem() {
               </Button>
             </div>
 
-            {/* Lista de tarefas ativas */}
             <div className="space-y-2">
               {tarefasAtivas.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
@@ -174,7 +181,6 @@ export default function TodoItem() {
               )}
             </div>
 
-            {/* Resumo */}
             {tarefasAtivas.length > 0 && (
               <div className="pt-4 border-t">
                 <div className="flex justify-between text-sm text-gray-600">
@@ -186,7 +192,6 @@ export default function TodoItem() {
             )}
           </TabsContent>
 
-          {/* Aba: Tarefas Deletadas */}
           <TabsContent value="deleted" className="space-y-4 mt-4">
             <CardDescription className="text-center">
               {tarefasDeletadas.length === 0
@@ -194,7 +199,6 @@ export default function TodoItem() {
                 : `${tarefasDeletadas.length} tarefas deletadas`}
             </CardDescription>
 
-            {/* Lista de tarefas deletadas */}
             <div className="space-y-2">
               {tarefasDeletadas.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
@@ -209,7 +213,7 @@ export default function TodoItem() {
                     key={tarefa._id}
                     className="flex items-center gap-3 p-3 rounded-lg border bg-gray-50 opacity-75"
                   >
-                    <div className="w-4 h-4" /> {/* Espaçador */}
+                    <div className="w-4 h-4" />
                     <span className="flex-1 text-gray-600 line-through">
                       {tarefa.title}
                     </span>
