@@ -9,7 +9,9 @@ todoRouter.get("/", async (request, response) => {
 });
 
 todoRouter.post("/", async (request, response) => {
-  const todos = await Todo.create(request.body);
+  const data = { ...request.body, userId: "6895f2bc886abd18a759038c" };
+
+  const todos = await Todo.create(data);
   return response.status(201).send({ working: true, todos });
 });
 
